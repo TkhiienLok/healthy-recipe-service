@@ -14,4 +14,4 @@ You will also see any lint errors in the console.
 
 ### Screenshot
 
-<img src="https://i.ibb.co/02Drp32/Screenshot-from-2020-06-24-22-04-53.png" alt="Screenshot-from-2020-06-24-22-04-53" border="0">
+<img src="https://i.ibb.co/1X6s8fv/Screenshot-from-2020-06-24-22-04-53.png" alt="Screenshot-from-2020-06-24-22-04-53" border="0">
