@@ -16,6 +16,15 @@ export default class ItemList extends Component {
         <li className="list-group-item">
           Healthy Blueberry Smoothie
         </li>
+        <li className="list-group-item">
+          Turkey Alfalfa Healthy Sandwich
+        </li>
+        <li className="list-group-item">
+          Gluten-free quiche with collard greens, ham and leeks
+        </li>
+        <li className="list-group-item">
+          Massaged Kale Salad Recipe
+        </li>
       </ul>
     );
   }
