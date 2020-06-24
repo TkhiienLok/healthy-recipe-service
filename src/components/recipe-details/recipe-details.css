@@ -1,0 +1,26 @@
+.recipe-details {
+  display: flex;
+  margin-top: 1rem;
+  flex-direction: row;
+  padding: 1rem;
+}
+
+.recipe-details .recipe-image-wrapper{
+  width: 30%;
+  height: 30%;
+  border-radius: 10px;
+}
+
+
+.recipe-details .recipe-image {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.recipe-details .list-group-item {
+  padding: .25rem;
+}
+
+.recipe-details .list-group-item .term {
+  margin-right: .5rem;
+}

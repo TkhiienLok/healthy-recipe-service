@@ -1,0 +1,27 @@
+.random-recipe {
+  display: flex;
+  padding: 1rem;
+}
+
+.random-recipe .recipe-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 10px;
+  margin-right: 1rem;
+}
+
+.random-recipe .list-group {
+  margin: 1rem 0 0 1rem;
+}
+
+.random-recipe .list-group-item {
+  padding: .25rem;
+}
+
+.random-recipe .list-group-item .term {
+  margin-right: .5rem;
+}
+
+.random-recipe .list-group-item .caution {
+  color: rgb(245, 131, 131);
+}
