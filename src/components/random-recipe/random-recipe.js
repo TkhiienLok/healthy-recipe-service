@@ -16,9 +16,13 @@ export default class RandomRecipe extends Component {
     error: false
   }
 
-  constructor() {
-    super();
+  componentDidMount() {
     this.updateRecipe();
+    this.interval = setInterval(this.updateRecipe, 5000)
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
   }
 
   onRecipeLoaded = (recipe) => {
@@ -35,9 +39,8 @@ export default class RandomRecipe extends Component {
     });
   }
 
-  updateRecipe() {
+  updateRecipe = () => {
     const randomRecipeNumber = Math.floor(Math.random() * 10);
-    
     this.healthyFoodService.getHealtyRecipe(randomRecipeNumber)
       .then(this.onRecipeLoaded)
       .catch(this.onError)
@@ -49,14 +52,16 @@ export default class RandomRecipe extends Component {
     const hasData = !(loading || error);
 
     const errorMessage = error ? <ErrorIndicator /> : null;
-    const spinner = loading ? <Spinner /> : null;
+    const spinner = loading && !error? <Spinner /> : null;
     const content = hasData ? <RecipeView recipe={recipe} quantity={quantity} unit={unit}/>: null;
     return (
-      <div className="random-recipe jumbotron rounded">
-        {errorMessage}
-        {spinner}
-        {content}
-      </div>
+      <React.Fragment>
+        <div className="random-recipe jumbotron rounded">
+          {errorMessage}
+          {spinner}
+          {content}
+        </div>
+      </React.Fragment>
     );
   }
 };

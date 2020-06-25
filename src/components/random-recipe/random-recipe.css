@@ -29,3 +29,7 @@
 .random-recipe .spinner-wrapper {
   display: inline-block;
 }
+
+.toggle-recipe {
+  margin-bottom: 10px;
+}
