@@ -1,0 +1,22 @@
+.error-indicator {
+  text-align: center;
+  width: 100%;
+}
+
+.error-indicator span {
+  display: block;
+  color: #ffab4a;
+  font-size: 20px;
+}
+
+.error-indicator .oops {
+  font-size: 25px;
+}
+
+.error-indicator .error-icon {
+  width: 38px;
+}
+
+.author-attribute, .author-attribute a {
+  color: #755757;
+}

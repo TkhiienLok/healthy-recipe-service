@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import HealthyFoodService from '../../services/healthy-food-service';
 import Spinner from '../spinner';
+import ErrorIndicator from '../error-indicator';
 import './random-recipe.css';
 
 
@@ -11,7 +12,8 @@ export default class RandomRecipe extends Component {
     recipe: {},
     quantity: 100,
     unit: 'g',
-    loading: true
+    loading: true,
+    error: false
   }
 
   constructor() {
@@ -26,19 +28,32 @@ export default class RandomRecipe extends Component {
     });
   }
 
+  onError = (err) => {
+    this.setState({
+      error: true,
+      loading: false
+    });
+  }
+
   updateRecipe() {
     const randomRecipeNumber = Math.floor(Math.random() * 10);
     
     this.healthyFoodService.getHealtyRecipe(randomRecipeNumber)
       .then(this.onRecipeLoaded)
+      .catch(this.onError)
   }
 
   render()  {
-    const { recipe, quantity, unit, loading } = this.state;
+    const { recipe, quantity, unit, loading, error } = this.state;
+    
+    const hasData = !(loading || error);
+
+    const errorMessage = error ? <ErrorIndicator /> : null;
     const spinner = loading ? <Spinner /> : null;
-    const content = !loading ? <RecipeView recipe={recipe} quantity={quantity} unit={unit}/>: null;
+    const content = hasData ? <RecipeView recipe={recipe} quantity={quantity} unit={unit}/>: null;
     return (
       <div className="random-recipe jumbotron rounded">
+        {errorMessage}
         {spinner}
         {content}
       </div>
