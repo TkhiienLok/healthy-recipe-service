@@ -25,3 +25,7 @@
 .random-recipe .list-group-item .caution {
   color: rgb(245, 131, 131);
 }
+
+.random-recipe .spinner-wrapper {
+  display: inline-block;
+}
