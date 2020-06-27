@@ -6,18 +6,27 @@ import ItemList from '../item-list';
 import RecipeDetails from '../recipe-details';
 
 import './app.css';
+import ErrorIndicator from '../error-indicator';
 
 export default class App extends Component {
 
   state = {
     showRandomRecipe: true,
-    selectedRecipe: null
+    selectedRecipe: null,
+    hasError: false
   };
 
   onRecipeSelected = (idx) => {
     this.setState({
+      selectedRecipe: null
+    });
+    this.setState({
       selectedRecipe: idx
-    })
+    });
+  }
+
+  componentDidCatch() {
+    this.setState({ hasError: true });
   }
 
   toggleRandomRecipe = () => {
@@ -29,8 +38,11 @@ export default class App extends Component {
   };
 
   render() {
+    if (this. state.hasError) {
+      return <ErrorIndicator />;
+    }
     const recipe = this.state.showRandomRecipe ?
-      <RandomRecipe/> :
+      <RandomRecipe onItemSelected={this.onRecipeSelected}/> :
       null;
 
     return (

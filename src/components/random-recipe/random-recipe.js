@@ -13,12 +13,13 @@ export default class RandomRecipe extends Component {
     quantity: 100,
     unit: 'g',
     loading: true,
-    error: false
+    error: false,
+    recipeIdx: null
   }
 
   componentDidMount() {
     this.updateRecipe();
-    this.interval = setInterval(this.updateRecipe, 5000)
+    this.interval = setInterval(this.updateRecipe, 10000)
   }
 
   componentWillUnmount() {
@@ -28,7 +29,7 @@ export default class RandomRecipe extends Component {
   onRecipeLoaded = (recipe) => {
     this.setState({ 
       recipe,
-      loading: false
+      loading: false,
     });
   }
 
@@ -41,19 +42,26 @@ export default class RandomRecipe extends Component {
 
   updateRecipe = () => {
     const randomRecipeNumber = Math.floor(Math.random() * 10);
+    this.setState({ recipeIdx: randomRecipeNumber });
     this.healthyFoodService.getHealtyRecipe(randomRecipeNumber)
       .then(this.onRecipeLoaded)
       .catch(this.onError)
   }
 
   render()  {
-    const { recipe, quantity, unit, loading, error } = this.state;
+    const { recipe, quantity, unit, loading, error, recipeIdx } = this.state;
     
     const hasData = !(loading || error);
 
     const errorMessage = error ? <ErrorIndicator /> : null;
     const spinner = loading && !error? <Spinner /> : null;
-    const content = hasData ? <RecipeView recipe={recipe} quantity={quantity} unit={unit}/>: null;
+    const content = hasData ? <RecipeView
+                                recipe={recipe}
+                                quantity={quantity}
+                                unit={unit}
+                                idx={recipeIdx}
+                                onItemSelected={this.props.onItemSelected}/>
+                                : null;
     return (
       <React.Fragment>
         <div className="random-recipe jumbotron rounded">
@@ -66,12 +74,15 @@ export default class RandomRecipe extends Component {
   }
 };
 
-const RecipeView = ({recipe, quantity, unit}) => {
-  const { title, calories, totalWeight, nutrients={}, imageURL, diets=[], cautions=[], url } = recipe;
+const RecipeView = ({recipe, quantity, unit, idx, onItemSelected}) => {
+  const { title, calories, totalWeight, imageURL, diets=[], cautions=[] } = recipe;
   return (
     <React.Fragment>
-      <img src={imageURL} className="recipe-image" alt="dish look"/>
+      <div className="recipe-image-wrapper">
+        <img src={imageURL} className="recipe-image" alt="dish look"/>
+      </div>
       <div>
+        <span style={ { color: '#b5f341' } }>May be you would you try this? ;)</span>
         <h4>{ title }</h4>
         <ul className="list-group list-group-flush">
           <li className="list-group-item">
@@ -98,17 +109,8 @@ const RecipeView = ({recipe, quantity, unit}) => {
             </li>)
           :
             null }
-          <li className="list-group-item">Nutrients:
-            <ul>
-              {
-                Object.keys(nutrients).map((nutrient) => {
-                  return(<li key={nutrient}>{ nutrient }: { nutrients[nutrient] }</li>);
-                })
-              }
-            </ul>
-          </li>
           <li className="list-group-item">
-            <a target="_blank" rel="noopener noreferrer" href={url}>Go to website</a>
+            <button onClick={() => onItemSelected(idx)} className="btn btn-outline-secondary">See details</button>
           </li>
         </ul>
       </div>

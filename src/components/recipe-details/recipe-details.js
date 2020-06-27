@@ -1,53 +1,143 @@
 import React, { Component } from 'react';
 
+import Spinner from '../spinner';
+import HealthyFoodService from '../../services/healthy-food-service';
 import './recipe-details.css';
 
 export default class RecipeDetails extends Component {
 
+  healthyFoodService = new HealthyFoodService()
+
+  state = {
+    recipe: null,
+    loading: true,
+    error: false,
+  }
+
+  componentDidMount() {
+    this.updateRecipe();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.recipeIdx !== prevProps.recipeIdx) {
+      this.updateRecipe();
+    }
+  }
+
+  onError = (err) => {
+    this.setState({
+      error: true,
+      loading: false
+    });
+  }
+
+  onRecipeLoaded = (recipe) => {
+    this.setState({
+      recipe,
+      loading: false,
+    });
+  }
+
+  updateRecipe = () => {
+    const { recipeIdx } = this.props;
+
+    if (!recipeIdx) {
+      return;
+    }
+    this.setState({
+      loading: true
+    });
+    this.healthyFoodService
+      .getHealtyRecipe(recipeIdx)
+      .then((recipe) => {
+        this.setState({
+          recipe,
+          loading: false
+        });
+      })
+      .catch(this.onError);
+  }
+
   render() {
+
+    if (!this.state.recipe) {
+      return <span>Select a recipe from a list</span>
+    }
+    const { loading, error } = this.state;
+    const loader = loading && !error ? <Spinner /> : null;
+    const content = !loading && !error ? <RecipeDetailView recipe={this.state.recipe}/> : null;
     return (
       <div className="recipe-details card">
-        <div className="recipe-image-wrapper">
-          <a target="_blank" rel="noopener noreferrer" href="https://www.chowhound.com/recipes/healthy-blueberry-smoothie-31683">
+        { loader }
+        { content }
+      </div>
+    )
+  }
+}
+
+const RecipeDetailView = ({recipe}) => {
+  const { title, calories, totalWeight, nutrients={}, imageURL, diets=[], cautions=[], url } = recipe;
+  return(
+    <React.Fragment>
+      <div className="recipe-image-wrapper">
+          <a target="_blank" rel="noopener noreferrer" href={url}>
           <img className="recipe-image"
-            src="https://www.edamam.com/web-img/836/836057a76c3163f22a6822d714695f2c.gif" 
+            src={imageURL}
             alt="dish look"/>
           </a>
         </div>
 
         <div className="card-body">
-          <h4>Healthy Blueberry Smoothie</h4>
+          <h4>{title}</h4>
           <ul className="list-group list-group-flush">
             <li className="list-group-item">
               <span className="term">Calories</span>
-              <span>213 | 100g</span>
+              <span>{ Math.round(calories * 100 / totalWeight) }  | 100g</span>
             </li>
             <li className="list-group-item">
-              <span className="term">Diet Labels</span>
+              <span className="term">Diet -</span>
+              {
+                diets.map((diet, idx, arr) => {
+                  return(<span key={`diet-${idx}`}>{ diet } { idx < arr.length - 1 ? ',' : '' } </span>);
+                })
+              }
+            </li>
+            { cautions.length
+          ?
+            (<li className="list-group-item">
+              <span className="term caution">!</span>
+                {
+                  cautions.map((caution, idx, arr) => {
+                    return(<span key={caution}>{ caution } { idx < arr.length - 1 ? ',' : '' } </span>);
+                  })
+                }
+            </li>)
+          :
+            null }
+            <li className="list-group-item">
+              <span className="term">Ingredients: </span>
               <ul>
-                <li>Balanced</li>
-                <li>Low-Sodium</li>
+              {
+                diets.map((ingredient, idx, arr) => {
+                  return(<li key={`ingredient-${idx}`}>{ ingredient }</li>);
+                })
+              }
+              </ul>
+            </li>
+            <li className="list-group-item">Nutrients:
+              <ul>
+                {
+                  Object.keys(nutrients).map((nutrient) => {
+                    return(<li key={nutrient}>{ nutrient }: { nutrients[nutrient] }</li>);
+                  })
+                }
               </ul>
             </li>
             <li className="list-group-item">
-              <span className="term">Ingredients</span>
-              <ul>
-                <li>1/2 cup milk</li>
-                <li>1/2 cup plain yogurt</li>
-                <li>1 cup blueberries, fresh or frozen</li>
-                <li>1/2 ripe banana</li>
-                <li>1/2 cup fresh spinach leaves</li>
-                <li>1/8 teaspoon ground nutmeg</li>
-                <li>1 teaspoon honey, or to taste</li>
-                <li>1 cup ice cubes</li>
-              </ul>
-            </li>
-            <li className="list-group-item">
-              <a target="_blank" rel="noopener noreferrer" href="https://www.chowhound.com/recipes/healthy-blueberry-smoothie-31683">Go to website</a>
+              <a target="_blank" rel="noopener noreferrer" href={url}>Go to website</a>
             </li>
           </ul>
         </div>
-      </div>
-    )
-  }
-}
+    </React.Fragment>
+  );
+};
