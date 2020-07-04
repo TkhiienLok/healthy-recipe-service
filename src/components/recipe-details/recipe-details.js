@@ -15,12 +15,12 @@ export default class RecipeDetails extends Component {
   }
 
   componentDidMount() {
-    this.updateRecipe();
+    this.updateRecipe(this.props.chosenSearchText, this.props.recipeIdx);
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.props.recipeIdx !== prevProps.recipeIdx) {
-      this.updateRecipe();
+    if (this.props.recipeIdx !== prevProps.recipeIdx || this.props.chosenSearchText !== prevProps.chosenSearchText) {
+      this.updateRecipe(this.props.chosenSearchText, this.props.recipeIdx);
     }
   }
 
@@ -38,17 +38,15 @@ export default class RecipeDetails extends Component {
     });
   }
 
-  updateRecipe = () => {
-    const { recipeIdx } = this.props;
-
-    if (!recipeIdx) {
+  updateRecipe = (term, id) => {
+    if (!id) {
       return;
     }
     this.setState({
       loading: true
     });
     this.healthyFoodService
-      .getHealtyRecipe(recipeIdx)
+      .getHealthyRecipe(term, id)
       .then((recipe) => {
         this.setState({
           recipe,

@@ -18,7 +18,7 @@ export default class RandomRecipe extends Component {
 
   componentDidMount() {
     this.updateRecipe();
-    this.interval = setInterval(this.updateRecipe, 5000)
+    this.interval = setInterval(this.updateRecipe, 10000)
   }
 
   componentWillUnmount() {
@@ -42,7 +42,7 @@ export default class RandomRecipe extends Component {
 
   updateRecipe = () => {
     const randomRecipeNumber = Math.floor(Math.random() * 10);
-    this.healthyFoodService.getHealtyRecipe(randomRecipeNumber)
+    this.healthyFoodService.getHealthyRecipe('healthy', randomRecipeNumber)
       .then(this.onRecipeLoaded)
       .catch(this.onError)
   }
@@ -73,7 +73,7 @@ export default class RandomRecipe extends Component {
 };
 
 const RecipeView = ({recipe, quantity, unit, onItemSelected}) => {
-  const { id, title, calories, totalWeight, imageURL, diets=[], cautions=[] } = recipe;
+  const { id, query, title, calories, totalWeight, imageURL, diets=[], cautions=[] } = recipe;
   return (
     <React.Fragment>
       <div className="recipe-image-wrapper">
@@ -108,7 +108,7 @@ const RecipeView = ({recipe, quantity, unit, onItemSelected}) => {
           :
             null }
           <li className="list-group-item">
-            <button onClick={() => onItemSelected(id)} className="btn btn-outline-secondary">See details</button>
+            <button onClick={() => onItemSelected(id, query)} className="btn btn-outline-secondary">See details</button>
           </li>
         </ul>
       </div>

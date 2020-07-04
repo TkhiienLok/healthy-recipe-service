@@ -4,6 +4,7 @@ import Header from '../header';
 import RandomRecipe from '../random-recipe';
 import RecipesPage from '../recipes-page';
 import ErrorIndicator from '../error-indicator';
+import RecipeSearch from '../recipe-search';
 import './app.css';
 
 export default class App extends Component {
@@ -11,15 +12,18 @@ export default class App extends Component {
   state = {
     showRandomRecipe: true,
     chosenRecipe: null,
-    hasError: false
+    chosenSearchText: null,
+    hasError: false,
+    searchKeyWordsString: 'healthy'
   };
 
-  onRecipeClicked = (idx) => {
+  onRecipeClicked = (idx, searchText) => {
     this.setState({
       chosenRecipe: null
     });
     this.setState({
-      chosenRecipe: idx
+      chosenRecipe: idx,
+      chosenSearchText: searchText
     });
   }
 
@@ -35,12 +39,17 @@ export default class App extends Component {
     });
   };
 
+  onSearchSubmit = (term) => {
+    this.setState({ searchKeyWordsString: term });
+  };
+
   render() {
     if (this.state.hasError) {
       return <ErrorIndicator />;
     }
     const recipe = this.state.showRandomRecipe ?
-      <RandomRecipe onItemSelected={this.onRecipeClicked}/> :
+      <RandomRecipe
+        onItemSelected={this.onRecipeClicked}/> :
       null;
 
     return (
@@ -52,7 +61,11 @@ export default class App extends Component {
           onClick={this.toggleRandomRecipe}>
           Toggle Random Recipe
         </button>
-        <RecipesPage recipeIdx={this.state.chosenRecipe}/>
+        <RecipeSearch onSearchSubmit={this.onSearchSubmit}/>
+        <RecipesPage
+          searchString={this.state.searchKeyWordsString}
+          recipeIdx={this.state.chosenRecipe}
+          chosenSearchText={this.state.chosenSearchText}/>
       </div>
     );
   }

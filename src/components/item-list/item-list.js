@@ -17,8 +17,18 @@ export default class ItemList extends Component {
   }
 
   componentDidMount() {
-    const { getData } = this.props;
-    getData()
+    this.updateItemList();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.searchString !== prevProps.searchString) {
+      this.updateItemList();
+    }
+  }
+
+  updateItemList() {
+    const { getData, searchString } = this.props;
+    getData(searchString)
       .then((itemList) => {
         this.setState({
           itemList
@@ -29,12 +39,12 @@ export default class ItemList extends Component {
 
   renderItems(itemsArr) {
     return itemsArr.map((item) => {
-      const { id } = item;
+      const { id, query } = item;
       const label = this.props.renderItem(item);
       return(
         <li key={`${id}`}
         className="list-group-item"
-        onClick={() => this.props.onItemSelected(id)}>
+        onClick={() => this.props.onItemSelected(id, query)}>
           { label }
         </li>
       );

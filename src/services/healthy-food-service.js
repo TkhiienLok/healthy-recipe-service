@@ -23,13 +23,19 @@ export default class HealthyFoodService {
     return body;
   }
 
-  getTopHealthyRecipies = async () => {
-    const recipiesData = await this.getResource(`/search`, { q: 'healthy'});
-    return recipiesData.hits.map(this._transformRecipe);
+  getTopHealthyRecipies = async (searchString) => {
+    const recipiesData = await this.getResource('/search', { q: searchString });
+    const mappedRecipes = recipiesData.hits.map(this._transformRecipe);
+    return mappedRecipes.map((recipe) => {
+      return {
+        ...recipe,
+        query: recipiesData.q
+      };
+    });
   }
 
-  getHealtyRecipe = async (index) => {
-    const recipes = await this.getTopHealthyRecipies();
+  getHealthyRecipe = async (searchString, index) => {
+    const recipes = await this.getTopHealthyRecipies(searchString);
     return recipes[index];
   }
 
@@ -51,5 +57,3 @@ export default class HealthyFoodService {
     }
   }
 }
-
-

@@ -14,21 +14,28 @@ export default class RecipesPage extends Component {
 
   state = {
     selectedRecipe: null,
+    selectedSearchText: null,
+    query: null,
     hasError: false,
     renderError: false
   }
 
-  onRecipeSelected = (idx) => {
+  onRecipeSelected = (idx, query) => {
     this.setState({
-      selectedRecipe: idx
+      selectedRecipe: idx,
+      selectedSearchText: query
     });
   }
 
+  componentDidMount() {
+    const { searchString } = this.props;
+  }
 
   componentDidUpdate(prevProps, prevState) {
     if ((this.props.recipeIdx !== prevState.selectedRecipe) && !prevState.hasError) {
       this.setState({ 
         selectedRecipe: this.props.recipeIdx,
+        selectedSearchText: this.props.chosenSearchText,
         hasError: false
        });
     }
@@ -49,10 +56,13 @@ export default class RecipesPage extends Component {
           <ItemList
             onItemSelected={this.onRecipeSelected}
             getData={this.healthyFoodService.getTopHealthyRecipies}
+            searchString={this.props.searchString}
             renderItem={(item) => item.title}/>
         </div>
         <div className="col-md-6">
-          <RecipeDetails recipeIdx={this.state.selectedRecipe}/>
+          <RecipeDetails
+            recipeIdx={this.state.selectedRecipe}
+            chosenSearchText={this.state.selectedSearchText}/>
           <ToggleError />
         </div>
       </div>
