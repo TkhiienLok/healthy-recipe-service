@@ -33,8 +33,9 @@ export default class HealthyFoodService {
     return recipes[index];
   }
 
-  _transformRecipe({ recipe }) {
+  _transformRecipe({ recipe }, index) {
     return {
+      id: index,
       calories: recipe.calories,
       nutrients: { 
         carbs: Math.round(recipe.totalNutrients.CHOCDF.quantity), 

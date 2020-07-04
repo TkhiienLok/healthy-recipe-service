@@ -14,12 +14,11 @@ export default class RandomRecipe extends Component {
     unit: 'g',
     loading: true,
     error: false,
-    recipeIdx: null
   }
 
   componentDidMount() {
     this.updateRecipe();
-    this.interval = setInterval(this.updateRecipe, 10000)
+    this.interval = setInterval(this.updateRecipe, 5000)
   }
 
   componentWillUnmount() {
@@ -27,7 +26,7 @@ export default class RandomRecipe extends Component {
   }
 
   onRecipeLoaded = (recipe) => {
-    this.setState({ 
+    this.setState({
       recipe,
       loading: false,
     });
@@ -42,14 +41,13 @@ export default class RandomRecipe extends Component {
 
   updateRecipe = () => {
     const randomRecipeNumber = Math.floor(Math.random() * 10);
-    this.setState({ recipeIdx: randomRecipeNumber });
     this.healthyFoodService.getHealtyRecipe(randomRecipeNumber)
       .then(this.onRecipeLoaded)
       .catch(this.onError)
   }
 
-  render()  {
-    const { recipe, quantity, unit, loading, error, recipeIdx } = this.state;
+  render() {
+    const { recipe, quantity, unit, loading, error } = this.state;
     
     const hasData = !(loading || error);
 
@@ -59,7 +57,6 @@ export default class RandomRecipe extends Component {
                                 recipe={recipe}
                                 quantity={quantity}
                                 unit={unit}
-                                idx={recipeIdx}
                                 onItemSelected={this.props.onItemSelected}/>
                                 : null;
     return (
@@ -74,8 +71,8 @@ export default class RandomRecipe extends Component {
   }
 };
 
-const RecipeView = ({recipe, quantity, unit, idx, onItemSelected}) => {
-  const { title, calories, totalWeight, imageURL, diets=[], cautions=[] } = recipe;
+const RecipeView = ({recipe, quantity, unit, onItemSelected}) => {
+  const { id, title, calories, totalWeight, imageURL, diets=[], cautions=[] } = recipe;
   return (
     <React.Fragment>
       <div className="recipe-image-wrapper">
@@ -110,7 +107,7 @@ const RecipeView = ({recipe, quantity, unit, idx, onItemSelected}) => {
           :
             null }
           <li className="list-group-item">
-            <button onClick={() => onItemSelected(idx)} className="btn btn-outline-secondary">See details</button>
+            <button onClick={() => onItemSelected(id)} className="btn btn-outline-secondary">See details</button>
           </li>
         </ul>
       </div>

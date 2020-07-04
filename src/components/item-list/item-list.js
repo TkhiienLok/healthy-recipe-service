@@ -21,20 +21,20 @@ export default class ItemList extends Component {
 
   componentDidMount() {
     this.healthyFoodService.getTopHealthyRecipies()
-      .then((recipies) => {
+      .then((recipes) => {
         this.setState({
-          recipeList: recipies
+          recipeList: recipes
         });
       })
       .catch(this.onError)
   }
 
   renderItems(itemsArr) {
-    return itemsArr.map(({ title, calories }, idx) => {
+    return itemsArr.map(({ id, title, calories }) => {
       return(
-        <li key={`${idx}-${calories}`}
+        <li key={`${id}-${calories}`}
         className="list-group-item"
-        onClick={() => this.props.onItemSelected(idx)}>
+        onClick={() => this.props.onItemSelected(id)}>
           { title }
         </li>
       );

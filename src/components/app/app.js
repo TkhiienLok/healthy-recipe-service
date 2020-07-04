@@ -2,26 +2,24 @@ import React, { Component } from 'react';
 
 import Header from '../header';
 import RandomRecipe from '../random-recipe';
-import ItemList from '../item-list';
-import RecipeDetails from '../recipe-details';
-
-import './app.css';
+import RecipesPage from '../recipes-page';
 import ErrorIndicator from '../error-indicator';
+import './app.css';
 
 export default class App extends Component {
 
   state = {
     showRandomRecipe: true,
-    selectedRecipe: null,
+    chosenRecipe: null,
     hasError: false
   };
 
-  onRecipeSelected = (idx) => {
+  onRecipeClicked = (idx) => {
     this.setState({
-      selectedRecipe: null
+      chosenRecipe: null
     });
     this.setState({
-      selectedRecipe: idx
+      chosenRecipe: idx
     });
   }
 
@@ -38,11 +36,11 @@ export default class App extends Component {
   };
 
   render() {
-    if (this. state.hasError) {
+    if (this.state.hasError) {
       return <ErrorIndicator />;
     }
     const recipe = this.state.showRandomRecipe ?
-      <RandomRecipe onItemSelected={this.onRecipeSelected}/> :
+      <RandomRecipe onItemSelected={this.onRecipeClicked}/> :
       null;
 
     return (
@@ -54,15 +52,7 @@ export default class App extends Component {
           onClick={this.toggleRandomRecipe}>
           Toggle Random Recipe
         </button>
-
-        <div className="row mb2">
-          <div className="col-md-6">
-            <ItemList onItemSelected={this.onRecipeSelected}/>
-          </div>
-          <div className="col-md-6">
-            <RecipeDetails recipeIdx={this.state.selectedRecipe}/>
-          </div>
-        </div>
+        <RecipesPage recipeIdx={this.state.chosenRecipe}/>
       </div>
     );
   }

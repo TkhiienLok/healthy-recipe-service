@@ -52,7 +52,8 @@ export default class RecipeDetails extends Component {
       .then((recipe) => {
         this.setState({
           recipe,
-          loading: false
+          loading: false,
+          error: false
         });
       })
       .catch(this.onError);
