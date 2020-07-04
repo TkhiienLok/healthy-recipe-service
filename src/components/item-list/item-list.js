@@ -1,15 +1,12 @@
 import React, { Component } from 'react';
 
 import Spinner from '../spinner';
-import HealthyFoodService from '../../services/healthy-food-service';
 import './item-list.css';
 
 export default class ItemList extends Component {
 
-  healthyFoodService = new HealthyFoodService();
-
   state = {
-    recipeList: null
+    itemList: null
   }
 
   onError = (err) => {
@@ -20,36 +17,39 @@ export default class ItemList extends Component {
   }
 
   componentDidMount() {
-    this.healthyFoodService.getTopHealthyRecipies()
-      .then((recipes) => {
+    const { getData } = this.props;
+    getData()
+      .then((itemList) => {
         this.setState({
-          recipeList: recipes
+          itemList
         });
       })
       .catch(this.onError)
   }
 
   renderItems(itemsArr) {
-    return itemsArr.map(({ id, title, calories }) => {
+    return itemsArr.map((item) => {
+      const { id } = item;
+      const label = this.props.renderItem(item);
       return(
-        <li key={`${id}-${calories}`}
+        <li key={`${id}`}
         className="list-group-item"
         onClick={() => this.props.onItemSelected(id)}>
-          { title }
+          { label }
         </li>
       );
     });
   }
 
   render() {
-    const { recipeList } = this.state;
-    if (!recipeList) {
+    const { itemList } = this.state;
+    if (!itemList) {
       return <Spinner />;
     }
-    const recipies = this.renderItems(recipeList);;
+    const items = this.renderItems(itemList);;
     return (
       <ul className="item-list list-group">
-        {recipies}
+        {items}
       </ul>
     );
   }

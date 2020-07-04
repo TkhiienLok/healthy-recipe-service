@@ -4,9 +4,13 @@ import ItemList from '../item-list';
 import RecipeDetails from '../recipe-details';
 import ErrorIndicator from '../error-indicator';
 import ToggleError from '../toggle-error';
+
+import HealthyFoodService from '../../services/healthy-food-service';
 import './recipes-page.css';
 
 export default class RecipesPage extends Component {
+
+  healthyFoodService = new HealthyFoodService();
 
   state = {
     selectedRecipe: null,
@@ -42,7 +46,10 @@ export default class RecipesPage extends Component {
     return (
       <div className="row mb2">
         <div className="col-md-6">
-          <ItemList onItemSelected={this.onRecipeSelected}/>
+          <ItemList
+            onItemSelected={this.onRecipeSelected}
+            getData={this.healthyFoodService.getTopHealthyRecipies}
+            renderItem={(item) => item.title}/>
         </div>
         <div className="col-md-6">
           <RecipeDetails recipeIdx={this.state.selectedRecipe}/>

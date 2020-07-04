@@ -29,6 +29,7 @@ export default class RandomRecipe extends Component {
     this.setState({
       recipe,
       loading: false,
+      error: false,
     });
   }
 

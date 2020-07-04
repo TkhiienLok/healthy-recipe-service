@@ -6,7 +6,7 @@ export default class HealthyFoodService {
   };
   
   
-  async getResource(url, paramsObj) {
+  getResource = async (url, paramsObj) => {
     const urlObj = new URL(`${this._apiBase}${url}`);
 
     this.params = {
@@ -23,17 +23,17 @@ export default class HealthyFoodService {
     return body;
   }
 
-  async getTopHealthyRecipies() {
-    const recipiesData =  await this.getResource(`/search`, { q: 'healthy'});
+  getTopHealthyRecipies = async () => {
+    const recipiesData = await this.getResource(`/search`, { q: 'healthy'});
     return recipiesData.hits.map(this._transformRecipe);
   }
 
-  async getHealtyRecipe(index) {
+  getHealtyRecipe = async (index) => {
     const recipes = await this.getTopHealthyRecipies();
     return recipes[index];
   }
 
-  _transformRecipe({ recipe }, index) {
+  _transformRecipe = ({ recipe }, index) => {
     return {
       id: index,
       calories: recipe.calories,
