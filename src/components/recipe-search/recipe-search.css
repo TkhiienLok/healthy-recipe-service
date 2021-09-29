@@ -3,3 +3,6 @@
   flex-grow: 1;
   margin-right: 3px;
 }
+button[type="submit"] {
+  min-width: 28%;
+}
