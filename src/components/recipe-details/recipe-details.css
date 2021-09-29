@@ -5,12 +5,11 @@
   padding: 1rem;
 }
 
-.recipe-details .recipe-image-wrapper{
+.recipe-details .recipe-image-wrapper {
   width: 30%;
   height: 30%;
   border-radius: 10px;
 }
-
 
 .recipe-details .recipe-image {
   width: 100%;
@@ -18,9 +17,21 @@
 }
 
 .recipe-details .list-group-item {
-  padding: .25rem;
+  padding: 0.25rem;
 }
 
 .recipe-details .list-group-item .term {
-  margin-right: .5rem;
+  margin-right: 0.5rem;
+}
+
+@media screen and (max-width: 500px) {
+  .recipe-details .recipe-image-wrapper {
+    width: 80%;
+    height: auto;
+    margin: 18px;
+  }
+  .recipe-details {
+    flex-direction: column-reverse;
+    margin-top: 34px;
+  }
 }
