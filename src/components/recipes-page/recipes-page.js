@@ -1,15 +1,14 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import ItemList from '../item-list';
-import RecipeDetails from '../recipe-details';
-import ErrorIndicator from '../error-indicator';
-import ToggleError from '../toggle-error';
+import ItemList from "../item-list";
+import RecipeDetails from "../recipe-details";
+import ErrorIndicator from "../error-indicator";
+import ToggleError from "../toggle-error";
 
-import HealthyFoodService from '../../services/healthy-food-service';
-import './recipes-page.css';
+import HealthyFoodService from "../../services/healthy-food-service";
+import "./recipes-page.css";
 
 export default class RecipesPage extends Component {
-
   healthyFoodService = new HealthyFoodService();
 
   state = {
@@ -17,27 +16,26 @@ export default class RecipesPage extends Component {
     selectedSearchText: null,
     query: null,
     hasError: false,
-    renderError: false
-  }
+    renderError: false,
+  };
 
   onRecipeSelected = (idx, query) => {
     this.setState({
       selectedRecipe: idx,
-      selectedSearchText: query
+      selectedSearchText: query,
     });
-  }
-
-  componentDidMount() {
-    const { searchString } = this.props;
-  }
+  };
 
   componentDidUpdate(prevProps, prevState) {
-    if ((this.props.recipeIdx !== prevState.selectedRecipe) && !prevState.hasError) {
-      this.setState({ 
+    if (
+      this.props.recipeIdx !== prevState.selectedRecipe &&
+      !prevState.hasError
+    ) {
+      this.setState({
         selectedRecipe: this.props.recipeIdx,
         selectedSearchText: this.props.chosenSearchText,
-        hasError: false
-       });
+        hasError: false,
+      });
     }
   }
 
@@ -57,13 +55,15 @@ export default class RecipesPage extends Component {
             onItemSelected={this.onRecipeSelected}
             getData={this.healthyFoodService.getTopHealthyRecipies}
             searchString={this.props.searchString}
-            renderItem={(item) => item.title}/>
+            renderItem={(item) => item.title}
+          />
         </div>
         <div className="col-md-6">
           <RecipeDetails
             recipeIdx={this.state.selectedRecipe}
-            chosenSearchText={this.state.selectedSearchText}/>
-          <ToggleError />
+            chosenSearchText={this.state.selectedSearchText}
+          />
+          {/* <ToggleError /> */}
         </div>
       </div>
     );
